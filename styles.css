@@ -113,6 +113,11 @@ body {
     justify-content: center;
 }
 
+/* Fallback to completely hide mouse pointer if browser ignores video constraints */
+.recording-mode, .recording-mode * {
+    cursor: none !important;
+}
+
 .recording-mode .canvas-wrapper {
     margin: auto;
 }

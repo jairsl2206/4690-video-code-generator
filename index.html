@@ -127,27 +127,20 @@ STACK   00a00h =    2560
          Total =    7946</textarea>
                     </div>
                     <div class="input-group">
-                        <label for="inputTerminalPrompt">Prompt de terminal (compilación)</label>
-                        <input type="text" id="inputTerminalPrompt" value="PS C:\Users\dev\proyecto>" placeholder="ej. PS C:\>">
-                    </div>
-
-                    <hr style="border-color: rgba(255,255,255,0.06); margin: 16px 0;">
-                    <p style="font-size:0.72rem; color: rgba(248,248,242,0.4); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em;">⬇ Entorno de ejecución (4690 OS)</p>
-
-                    <div class="input-group">
-                        <label for="inputRunPrompt">Prompt de ejecución (4690 OS)</label>
-                        <input type="text" id="inputRunPrompt" value="C:CURSO/>" placeholder="ej. C:CURSO/>">
+                        <label for="inputRunPrompt">Prompt Ejecución (4690 OS)</label>
+                        <input type="text" id="inputRunPrompt" value="C:CURSO/>" spellcheck="false">
                     </div>
                     <div class="input-group">
-                        <label for="inputRunCmd">Comando de ejecución</label>
-                        <input type="text" id="inputRunCmd" value="EXAMPLE3" placeholder="ej. EXAMPLE3">
+                        <label for="inputRunCmd">Comando de Ejecución</label>
+                        <input type="text" id="inputRunCmd" value="EXAMPLE1" spellcheck="false">
                     </div>
                     <div class="input-group">
-                        <label for="inputOutput">Salida del programa (Output)</label>
-                        <textarea id="inputOutput" rows="6" spellcheck="false" placeholder="Salida esperada...">Producto: Cereal 500g
-Cantidad:  3
-Precio U: $ 45.5
-Total:    $ 136.5</textarea>
+                        <label for="inputOutput">Resultado / Output</label>
+                        <textarea id="inputOutput" rows="4" spellcheck="false">Iniciando sistema POS...
+Verificando dispositivo  1
+Verificando dispositivo  2
+Verificando dispositivo  3
+Sistema listo.</textarea>
                     </div>
                 </div>
 
@@ -157,16 +150,16 @@ Total:    $ 136.5</textarea>
                     <div class="input-group slider-group">
                         <label for="fontSize">Tamaño de Fuente (rem)</label>
                         <div class="slider-row">
-                            <input type="range" id="fontSize" min="0.6" max="1.5" value="0.82" step="0.02">
-                            <span class="slider-value" id="valFontSize">0.82</span>
+                            <input type="range" id="fontSize" min="0.6" max="1.5" value="1" step="0.02">
+                            <span class="slider-value" id="valFontSize">1</span>
                         </div>
                     </div>
                     <!-- SPEED SETTINGS -->
                     <div class="input-group slider-group">
                         <label for="speedTyping">Velocidad de escritura de código</label>
                         <div class="slider-row">
-                            <input type="range" id="speedTyping" min="10" max="150" value="45">
-                            <span class="slider-value" id="valTyping">45ms</span>
+                            <input type="range" id="speedTyping" min="10" max="150" value="20">
+                            <span class="slider-value" id="valTyping">20ms</span>
                         </div>
                     </div>
                     <div class="input-group slider-group">
@@ -179,8 +172,8 @@ Total:    $ 136.5</textarea>
                     <div class="input-group slider-group">
                         <label for="speedOutput">Velocidad de aparición del output</label>
                         <div class="slider-row">
-                            <input type="range" id="speedOutput" min="50" max="800" value="200">
-                            <span class="slider-value" id="valOutput">200ms</span>
+                            <input type="range" id="speedOutput" min="50" max="800" value="100">
+                            <span class="slider-value" id="valOutput">100ms</span>
                         </div>
                     </div>
                     <div class="input-group slider-group">
@@ -224,7 +217,8 @@ IP addresses.
 addr          127.0.0.1 interface 0 mask ff000000 broadcast            0.0.0.0
 addr      192.168.1.150 interface 0 mask ffffff00 broadcast      192.168.1.255
 
-C:>cd CURSO</textarea>
+C:>cd CURSO
+</textarea>
                         <small style="color:var(--text-muted);font-size:0.7rem;">Aparece antes de ejecutar el .286</small>
                     </div>
 
@@ -247,14 +241,11 @@ Mode                 LastWriteTime         Length Name
 
                     <div class="input-group">
                         <label for="envDosDir">Plantilla 4690 OS DIR (Post-Ejecución)</label>
-                        <textarea id="envDosDir" rows="7" spellcheck="false" style="font-size:0.7rem;">
-  Volume in drive h0: is DISK_C
+                        <textarea id="envDosDir" rows="7" spellcheck="false" style="font-size:0.7rem;">  Volume in drive h0: is DISK_C
   Directory of h0:CURSO/
 
 .            <DIR>      {{DATE_4690}}  10:33a
 ..           <DIR>      {{DATE_4690}}  10:33a
-EXAMPLE1 286     9216   6-30-2026  10:34a
-EXAMPLE2 286     9344   6-30-2026  10:54a
 {{FILE_286_DOS}}
 
            5 Files   29493056 KB free</textarea>

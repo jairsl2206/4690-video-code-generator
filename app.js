@@ -682,7 +682,11 @@
 
         // Request user to share their tab
         const stream = await navigator.mediaDevices.getDisplayMedia({
-            video: { displaySurface: 'browser', frameRate: 30 },
+            video: { 
+                displaySurface: 'browser', 
+                frameRate: 30,
+                cursor: 'never'
+            },
             audio: false,
             preferCurrentTab: true,
         });
