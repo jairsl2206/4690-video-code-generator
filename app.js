@@ -547,20 +547,22 @@
                 }
                 await printLineInto(DOM.compileOutput, DOM.compileBody, '', 50, signal);
                 
+                // Prompt visible before dir
+                DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>${CURSOR_TERM}`;
+                scrollToBottom(DOM.compileBody);
+                await delay(s.pauseDir, signal);
+
                 // 2. Dir after compile
-                DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>`;
                 await typeLineInto(DOM.compileOutput, DOM.compileBody, 'dir', s.speedTerminal, signal, '#f8f8f2');
                 await printMultilineInto(DOM.compileOutput, DOM.compileBody, psDirObj, 30, signal, '#f8f8f2');
                 await printLineInto(DOM.compileOutput, DOM.compileBody, '', 50, signal);
                 
-                DOM.compileOutput.innerHTML += CURSOR_TERM;
+                DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>${CURSOR_TERM}`;
                 scrollToBottom(DOM.compileBody);
                 await delay(s.pauseDir, signal);
-                DOM.compileOutput.innerHTML = DOM.compileOutput.innerHTML.replace(CURSOR_TERM, '');
 
                 // 3. Link step
                 if (s.linkCmd) {
-                    DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>`;
                     await typeLineInto(DOM.compileOutput, DOM.compileBody, s.linkCmd, s.speedTerminal, signal, '#f8f8f2');
 
                     DOM.compileOutput.innerHTML += CURSOR_TERM;
@@ -573,20 +575,19 @@
                     }
                     await printLineInto(DOM.compileOutput, DOM.compileBody, '', 50, signal);
                     
+                    DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>${CURSOR_TERM}`;
+                    scrollToBottom(DOM.compileBody);
+                    await delay(s.pauseDir, signal);
+
                     // 4. Dir after link
-                    DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>`;
                     await typeLineInto(DOM.compileOutput, DOM.compileBody, 'dir', s.speedTerminal, signal, '#f8f8f2');
                     await printMultilineInto(DOM.compileOutput, DOM.compileBody, psDirExe, 30, signal, '#f8f8f2');
                     await printLineInto(DOM.compileOutput, DOM.compileBody, '', 50, signal);
                     
-                    DOM.compileOutput.innerHTML += CURSOR_TERM;
+                    DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>${CURSOR_TERM}`;
                     scrollToBottom(DOM.compileBody);
                     await delay(s.pauseDir, signal);
-                    DOM.compileOutput.innerHTML = DOM.compileOutput.innerHTML.replace(CURSOR_TERM, '');
                 }
-
-                DOM.compileOutput.innerHTML += `<span style="color:#6272a4">${escapeHtml(s.terminalPrompt)} </span>${CURSOR_TERM}`;
-                scrollToBottom(DOM.compileBody);
 
                 await delay(s.pausePhase * 0.6, signal);
             } else {
@@ -618,20 +619,20 @@
                     bootHTML += `<span style="color:#8b949e">${escapeHtml(line)}</span>\n`;
                 });
 
-                DOM.runOutput.innerHTML = bootHTML + `<span>${escapeHtml(s.runPrompt)}</span>`;
+                DOM.runOutput.innerHTML = bootHTML + `<span>${escapeHtml(s.runPrompt)}</span>${CURSOR_TERM}`;
+                scrollToBottom(DOM.runBody);
+                await delay(s.pauseDir, signal);
                 
                 // 1. Dir before run
                 await typeLineInto(DOM.runOutput, DOM.runBody, 'dir', s.speedTerminal, signal, '#f8f8f2');
                 await printMultilineInto(DOM.runOutput, DOM.runBody, dosDirExe, 30, signal, '#f8f8f2');
                 await printLineInto(DOM.runOutput, DOM.runBody, '', 50, signal);
                 
-                DOM.runOutput.innerHTML += CURSOR_TERM;
+                DOM.runOutput.innerHTML += `<span>${escapeHtml(s.runPrompt)}</span>${CURSOR_TERM}`;
                 scrollToBottom(DOM.runBody);
                 await delay(s.pauseDir, signal);
-                DOM.runOutput.innerHTML = DOM.runOutput.innerHTML.replace(CURSOR_TERM, '');
                 
                 // 2. Run
-                DOM.runOutput.innerHTML += `<span>${escapeHtml(s.runPrompt)}</span>`;
                 await typeLineInto(DOM.runOutput, DOM.runBody, s.runCmd, s.speedTerminal, signal, '#f8f8f2');
                 
                 await delay(400, signal);
@@ -676,61 +677,6 @@
     }
 
     // ==================
-    // RECORDING (Screen Capture via getDisplayMedia)
-    // ==================
-    async function startScreenRecording(focusMode) {
-        // Set focus mode class
-        if (focusMode) {
-            DOM.canvasWrapper.classList.add(`focus-${focusMode}`);
-        }
-
-        // Request user to share their tab
-        const stream = await navigator.mediaDevices.getDisplayMedia({
-            video: { 
-                displaySurface: 'browser', 
-                frameRate: 30,
-                cursor: 'never'
-            },
-            audio: false,
-            preferCurrentTab: true,
-        });
-
-        const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
-        mediaRecorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8000000 });
-        recordedChunks = [];
-
-        mediaRecorder.ondataavailable = (e) => {
-            if (e.data && e.data.size > 0) recordedChunks.push(e.data);
-        };
-
-        mediaRecorder.onstop = () => {
-            stream.getTracks().forEach(t => t.stop());
-            DOM.canvasWrapper.className = 'canvas-wrapper'; // reset focus classes
-
-            if (recordedChunks.length > 0) {
-                const blob = new Blob(recordedChunks, { type: mimeType });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-                const suffix = focusMode ? `_${focusMode}` : '_all';
-                a.download = `4690_basic${suffix}_${timestamp}.webm`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 5000);
-            }
-        };
-
-        stream.getVideoTracks()[0].addEventListener('ended', () => {
-            if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-            if (abortController) abortController.abort();
-        });
-
-        mediaRecorder.start(100);
-    }
-
-    // ==================
     // BUTTON EVENT HANDLERS
     // ==================
     function setPlayingUI(playing) {
@@ -762,36 +708,161 @@
         if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
     });
 
-    async function handleRecordClick(focusMode) {
+    DOM.btnClean.addEventListener('click', () => {
+        if (isPlaying) return;
+        resetCanvas();
+    });
+
+    DOM.btnRecordEditor.addEventListener('click', () => openRecorderPopup('editor'));
+    DOM.btnRecordCompile.addEventListener('click', () => openRecorderPopup('compile'));
+    DOM.btnRecordRun.addEventListener('click', () => openRecorderPopup('run'));
+    DOM.btnRecordAll.addEventListener('click', () => openRecorderPopup(null));
+
+    // ==================
+    // RECORDER POPUP
+    // ==================
+    function openRecorderPopup(focusMode) {
         if (isPlaying || isRecording) return;
-        isRecording = true;
-        setPlayingUI(true);
-        abortController = new AbortController();
+        saveConfig();
 
-        // Hide sidebar and go full-screen canvas
-        document.body.classList.add('recording-mode');
+        const dims = focusMode ? { w: 700, h: 620 } : { w: 1260, h: 620 };
+        const focus = focusMode || 'all';
 
-        try {
-            await startScreenRecording(focusMode);
-            await delay(500, abortController.signal); // allow stream to settle
-            await runAnimation(abortController.signal, focusMode);
-            await delay(1000, abortController.signal); // hold final frame
-        } catch (err) {
-            if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
-                console.error('Recording error:', err);
-                alert('Error al grabar: ' + err.message);
-            }
-        } finally {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-            document.body.classList.remove('recording-mode'); // Restore sidebar
-            setPlayingUI(false);
+        const popup = window.open(
+            `index.html?recorder=1&focus=${focus}`,
+            '4690-recorder',
+            `width=${dims.w},height=${dims.h + 80},menubar=no,toolbar=no,location=no,status=no,scrollbars=no,resizable=no`
+        );
+
+        if (!popup) {
+            alert('Permite ventanas emergentes (pop-ups) para usar la grabación optimizada.');
         }
     }
 
-    DOM.btnRecordEditor.addEventListener('click', () => handleRecordClick('editor'));
-    DOM.btnRecordCompile.addEventListener('click', () => handleRecordClick('compile'));
-    DOM.btnRecordRun.addEventListener('click', () => handleRecordClick('run'));
-    DOM.btnRecordAll.addEventListener('click', () => handleRecordClick(null));
+    async function autoStartRecordingInPopup(focusMode) {
+        loadConfig();
+
+        if (focusMode && focusMode !== 'all') {
+            DOM.canvasWrapper.classList.add(`focus-${focusMode}`);
+        }
+
+        isRecording = true;
+        abortController = new AbortController();
+
+        try {
+            await startScreenRecordingInPopup(focusMode);
+            await delay(500, abortController.signal);
+            await runAnimation(abortController.signal, focusMode);
+            await delay(1000, abortController.signal);
+        } catch (err) {
+            if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
+                console.error('Recording error:', err);
+            }
+        } finally {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+            setTimeout(() => { try { window.close(); } catch(e) {} }, 2000);
+        }
+    }
+
+    async function startScreenRecordingInPopup(focusMode) {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+            video: {
+                displaySurface: 'browser',
+                frameRate: 30,
+                cursor: 'never'
+            },
+            audio: false,
+            preferCurrentTab: true,
+        });
+
+        const settings = getSettings();
+        const wantMp4 = settings.videoFormat === 'mp4';
+
+        let recordStream = stream;
+        let cleanupPipeline = null;
+
+        if (wantMp4) {
+            const videoTrack = stream.getVideoTracks()[0];
+
+            const video = document.createElement('video');
+            video.style.display = 'none';
+            video.muted = true;
+            document.body.appendChild(video);
+            video.srcObject = new MediaStream([videoTrack]);
+            await video.play();
+
+            const vw = video.videoWidth || 1920;
+            const vh = video.videoHeight || 1080;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = vw;
+            canvas.height = vh;
+            const ctx = canvas.getContext('2d');
+
+            let animId = null;
+            function drawFrame() {
+                ctx.drawImage(video, 0, 0, vw, vh);
+                animId = requestAnimationFrame(drawFrame);
+            }
+            drawFrame();
+
+            recordStream = canvas.captureStream(30);
+
+            cleanupPipeline = () => {
+                if (animId) cancelAnimationFrame(animId);
+                if (video.parentNode) video.remove();
+                canvas.remove();
+            };
+        }
+
+        const mp4Mime = 'video/mp4;codecs=avc1.42E01E';
+        const webmMime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+        const mimeType = wantMp4 && MediaRecorder.isTypeSupported(mp4Mime) ? mp4Mime : webmMime;
+        const ext = mimeType.startsWith('video/mp4') ? 'mp4' : 'webm';
+
+        mediaRecorder = new MediaRecorder(recordStream, { mimeType, videoBitsPerSecond: 8000000 });
+        recordedChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            if (cleanupPipeline) cleanupPipeline();
+            stream.getTracks().forEach(t => t.stop());
+
+            if (recordedChunks.length > 0) {
+                const blob = new Blob(recordedChunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+                const suffix = focusMode ? `_${focusMode}` : '_all';
+                a.download = `4690_basic${suffix}_${timestamp}.${ext}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
+            }
+        };
+
+        stream.getVideoTracks()[0].addEventListener('ended', () => {
+            if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+            if (abortController) abortController.abort();
+        });
+
+        mediaRecorder.start(100);
+    }
+
+    // ==================
+    // DETECT RECORDER POPUP
+    // ==================
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('recorder') === '1') {
+        document.body.classList.add('recorder-popup');
+        const focus = urlParams.get('focus') || 'all';
+        setTimeout(() => autoStartRecordingInPopup(focus), 300);
+    }
 
     // ==================
     // INIT
