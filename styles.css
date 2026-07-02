@@ -122,6 +122,43 @@ body {
     margin: auto;
 }
 
+/* === RECORDER POPUP === */
+.recorder-popup {
+    overflow: hidden;
+}
+
+.recorder-popup, .recorder-popup * {
+    cursor: none !important;
+}
+
+.recorder-popup .app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.recorder-popup .sidebar {
+    display: none !important;
+}
+
+.recorder-popup .canvas-area {
+    flex: 1;
+    padding: 0;
+    background: #000;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    overflow: hidden;
+}
+
+.recorder-popup .canvas-wrapper {
+    max-width: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+}
+
 .sidebar-header {
     padding: 20px 22px 14px;
     border-bottom: 1px solid var(--border-subtle);
@@ -415,6 +452,17 @@ body {
 
 .btn-stop:hover {
     background: rgba(255, 85, 85, 1);
+}
+
+.btn-clean {
+    background: rgba(6, 182, 212, 0.12);
+    color: var(--accent-secondary);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
+.btn-clean:hover {
+    background: rgba(6, 182, 212, 0.2);
+    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.15);
 }
 
 .btn-icon {

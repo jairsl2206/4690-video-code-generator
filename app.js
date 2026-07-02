@@ -44,10 +44,12 @@
 
         btnPlay: $('#btnPlay'),
         btnStop: $('#btnStop'),
+        btnClean: $('#btnClean'),
         btnRecordEditor: $('#btnRecordEditor'),
         btnRecordCompile: $('#btnRecordCompile'),
         btnRecordRun: $('#btnRecordRun'),
         btnRecordAll: $('#btnRecordAll'),
+        inputVideoFormat: $('#videoFormat'),
 
         codeOutput: $('#codeOutput'),
         lineNumbers: $('#lineNumbers'),
@@ -140,7 +142,8 @@
             fontSize: DOM.fontSize ? DOM.fontSize.value : '0.82',
             envBootSeq: DOM.envBootSeq ? DOM.envBootSeq.value : '',
             envPsDir: DOM.envPsDir ? DOM.envPsDir.value : '',
-            envDosDir: DOM.envDosDir ? DOM.envDosDir.value : ''
+            envDosDir: DOM.envDosDir ? DOM.envDosDir.value : '',
+            videoFormat: DOM.inputVideoFormat ? DOM.inputVideoFormat.value : 'webm'
         };
     }
 
@@ -181,6 +184,7 @@
                 if (config.envBootSeq && DOM.envBootSeq) DOM.envBootSeq.value = config.envBootSeq;
                 if (config.envPsDir && DOM.envPsDir) DOM.envPsDir.value = config.envPsDir;
                 if (config.envDosDir && DOM.envDosDir) DOM.envDosDir.value = config.envDosDir;
+                if (config.videoFormat && DOM.inputVideoFormat) DOM.inputVideoFormat.value = config.videoFormat;
 
                 updateSliderLabels();
             } catch (e) {

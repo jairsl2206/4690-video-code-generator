@@ -204,6 +204,13 @@ Sistema listo.</textarea>
                             <span class="slider-value" id="valEnd">2.0s</span>
                         </div>
                     </div>
+                    <div class="input-group">
+                        <label for="videoFormat">Formato de video</label>
+                        <select id="videoFormat" style="width:100%;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text-primary);font-family:var(--font-mono);font-size:0.82rem;outline:none;">
+                            <option value="webm">WebM (VP9 — recomendado)</option>
+                            <option value="mp4">MP4 (H.264 — si el navegador lo soporta)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- TAB: ENVIRONMENT -->
@@ -272,6 +279,10 @@ Mode                 LastWriteTime         Length Name
             <div class="sidebar-footer">
                 <button class="btn btn-primary" id="btnPlay">
                     <span class="btn-icon">▶</span> Previsualizar
+                </button>
+
+                <button class="btn btn-clean" id="btnClean">
+                    <span class="btn-icon">✧</span> Limpiar Pantalla
                 </button>
                 
                 <div class="record-group">
