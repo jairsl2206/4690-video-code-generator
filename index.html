@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generador de videos de código para capacitación 4690 BASIC">
-    <title>4690 BASIC — Video Generator</title>
+    <meta name="description" content="Generador de videos de codigo para capacitacion 4690 BASIC">
+    <title>4690 BASIC — Video Generator v2</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,10 +16,10 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <span class="logo-icon">▶</span>
+                    <span class="logo-icon">&#9654;</span>
                     <h1>4690 Video<span class="accent">Gen</span></h1>
                 </div>
-                <p class="subtitle">Generador de clips de código animado</p>
+                <p class="subtitle">Generador de clips de codigo animado v2</p>
             </div>
 
             <div class="sidebar-content">
@@ -31,11 +31,11 @@
                     <div class="phase-dot" data-phase="editor">
                         <span class="dot"></span><span class="label">Editor</span>
                     </div>
-                    <div class="phase-dot" data-phase="compile">
-                        <span class="dot"></span><span class="label">Compilar</span>
+                    <div class="phase-dot" data-phase="powershell">
+                        <span class="dot"></span><span class="label">PowerShell</span>
                     </div>
-                    <div class="phase-dot" data-phase="run">
-                        <span class="dot"></span><span class="label">Ejecutar</span>
+                    <div class="phase-dot" data-phase="ibm4690">
+                        <span class="dot"></span><span class="label">4690 OS</span>
                     </div>
                     <div class="phase-dot" data-phase="done">
                         <span class="dot"></span><span class="label">Fin</span>
@@ -44,22 +44,87 @@
 
                 <!-- TAB NAVIGATION -->
                 <div class="tab-nav">
-                    <button class="tab-btn active" data-tab="code-tab" id="tabCode">Código</button>
-                    <button class="tab-btn" data-tab="commands-tab" id="tabCommands">Comandos</button>
-                    <button class="tab-btn" data-tab="settings-tab" id="tabSettings">Ajustes</button>
-                    <button class="tab-btn" data-tab="env-tab" id="tabEnv">Entorno</button>
-                    <button class="tab-btn" data-tab="sys-tab" id="tabSys">Sistema</button>
+                    <button class="tab-btn active" data-tab="sim-tab">Simulaci&oacute;n</button>
+                    <button class="tab-btn" data-tab="editor-tab">Editor</button>
+                    <button class="tab-btn" data-tab="ps-tab">PowerShell</button>
+                    <button class="tab-btn" data-tab="ibm-tab">4690 OS</button>
+                    <button class="tab-btn" data-tab="sys-tab">Sistema</button>
                 </div>
 
-                <!-- TAB: CODE -->
-                <div class="tab-panel active" id="code-tab">
+                <!-- TAB: SIMULACION -->
+                <div class="tab-panel active" id="sim-tab">
                     <div class="input-group">
-                        <label for="inputFileName">Nombre del archivo</label>
-                        <input type="text" id="inputFileName" value="Example3.bas" placeholder="ej. Example3.bas">
+                        <label for="simType">Tipo de simulaci&oacute;n</label>
+                        <select id="simType" style="width:100%;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text-primary);font-family:var(--font-ui);font-size:0.82rem;outline:none;">
+                            <option value="all">Todos los paneles (secuencial)</option>
+                            <option value="editor">Solo Editor</option>
+                            <option value="powershell">Solo PowerShell</option>
+                            <option value="ibm4690">Solo 4690 OS Controller</option>
+                        </select>
+                    </div>
+
+                    <div class="section-label">Velocidades</div>
+
+                    <div class="input-group slider-group">
+                        <label for="speedTyping">Escritura de c&oacute;digo</label>
+                        <div class="slider-row">
+                            <input type="range" id="speedTyping" min="10" max="150" value="20">
+                            <span class="slider-value" id="valTyping">20ms</span>
+                        </div>
+                    </div>
+                    <div class="input-group slider-group">
+                        <label for="speedTerminal">Escritura en terminal</label>
+                        <div class="slider-row">
+                            <input type="range" id="speedTerminal" min="10" max="150" value="30">
+                            <span class="slider-value" id="valTerminal">30ms</span>
+                        </div>
+                    </div>
+                    <div class="input-group slider-group">
+                        <label for="speedOutput">Aparici&oacute;n del output</label>
+                        <div class="slider-row">
+                            <input type="range" id="speedOutput" min="50" max="800" value="100">
+                            <span class="slider-value" id="valOutput">100ms</span>
+                        </div>
+                    </div>
+                    <div class="input-group slider-group">
+                        <label for="pausePhase">Pausa entre paneles</label>
+                        <div class="slider-row">
+                            <input type="range" id="pausePhase" min="200" max="3000" value="1000" step="100">
+                            <span class="slider-value" id="valPause">1.0s</span>
+                        </div>
+                    </div>
+
+                    <div class="section-label">Apariencia</div>
+                    <div class="input-group">
+                        <label for="videoPrefix">Prefijo del video (ej. "1.1-tipos-de-datos")</label>
+                        <input type="text" id="videoPrefix" value="" placeholder="ej. 1.1-tipos-de-datos">
+                        <small style="color:var(--text-muted);font-size:0.68rem;">Los archivos se nombrar&aacute;n: prefijo-editor.mp4, prefijo-powershell.mp4, etc.</small>
+                    </div>
+                    <div class="input-group slider-group">
+                        <label for="fontSize">Tama&ntilde;o de fuente (rem)</label>
+                        <div class="slider-row">
+                            <input type="range" id="fontSize" min="0.6" max="1.5" value="1" step="0.02">
+                            <span class="slider-value" id="valFontSize">1</span>
+                        </div>
                     </div>
                     <div class="input-group">
-                        <label for="inputCode">Código fuente (BASIC)</label>
-                        <textarea id="inputCode" rows="12" spellcheck="false" placeholder="Escribe o pega tu código aquí...">! Tipos de datos fundamentales
+                        <label for="videoFormat">Formato de video</label>
+                        <select id="videoFormat" style="width:100%;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text-primary);font-family:var(--font-mono);font-size:0.82rem;outline:none;">
+                            <option value="mp4">MP4 (H.264 + AAC)</option>
+                            <option value="webm">WebM (VP9)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- TAB: EDITOR -->
+                <div class="tab-panel" id="editor-tab">
+                    <div class="input-group">
+                        <label for="inputFileName">Nombre del archivo</label>
+                        <input type="text" id="inputFileName" value="Example.bas" placeholder="ej. Example.bas">
+                    </div>
+                    <div class="input-group">
+                        <label for="inputCode">C&oacute;digo fuente (BASIC)</label>
+                        <textarea id="inputCode" rows="16" spellcheck="false" placeholder="Escribe o pega tu codigo aqui...">! Tipos de datos fundamentales
 %ENVIRON C
 
 ! String (Sufijo $)
@@ -82,156 +147,21 @@ END</textarea>
                     </div>
                 </div>
 
-                <!-- TAB: COMMANDS -->
-                <div class="tab-panel" id="commands-tab">
+                <!-- TAB: POWERSHELL -->
+                <div class="tab-panel" id="ps-tab">
                     <div class="input-group">
-                        <label for="inputCompileCmd">Comando de compilación</label>
-                        <input type="text" id="inputCompileCmd" value=".\BASIC.EXE .\Example3.bas" placeholder="ej. .\BASIC.EXE .\Example3.bas">
-                    </div>
-                    <div class="input-group">
-                        <label for="inputCompileMsg">Salida del compilador (multilínea)</label>
-                        <textarea id="inputCompileMsg" rows="10" spellcheck="false">BASIC .\Example3.bas
---------------------------------------------------
-IBM 4680 BASIC Compiler  07/09/10  Version 3.15
-5696-192 (c) Copyright IBM Corp 1986-2004.
-Licensed Material - Program Property Of IBM.
-  (c) Copyright Digital Research Inc. 1985
---------------------------------------------------
-end of pass 1
-end of pass 2
-End of Compilation
-
-        Large Memory Model Controller Code Generation
-    --------------------------------------------------
-        Code segment size:      00a8H (168 bytes)
-        Data segment size:      0072H (114 bytes)
-    --------------------------------------------------</textarea>
-                    </div>
-                    <div class="input-group">
-                        <label for="inputLinkCmd">Comando de linkeo (dejar vacío para omitir)</label>
-                        <input type="text" id="inputLinkCmd" value=".\link86.exe .\EXAMPLE3.OBJ" placeholder="Dejar vacío para omitir">
-                    </div>
-                    <div class="input-group">
-                        <label for="inputLinkMsg">Salida del linker (multilínea)</label>
-                        <textarea id="inputLinkMsg" rows="6" spellcheck="false">--------------------------------------------------
-LINK86 Linkage Editor      vers. 3.10c
-F l e x O S  -  2 8 6   L i n k e r
-Copyright (C) 1982-1991     Digital Research, Inc.
---------------------------------------------------
-
-....................................................
-
-CODE    00a06h =    2566
-DATA    00b04h =    2820
-STACK   00a00h =    2560
-         Total =    7946</textarea>
-                    </div>
-                    <div class="input-group">
-                        <label for="inputRunPrompt">Prompt Ejecución (4690 OS)</label>
-                        <input type="text" id="inputRunPrompt" value="C:CURSO/>" spellcheck="false">
-                    </div>
-                    <div class="input-group">
-                        <label for="inputRunCmd">Comando de Ejecución</label>
-                        <input type="text" id="inputRunCmd" value="EXAMPLE1" spellcheck="false">
-                    </div>
-                    <div class="input-group">
-                        <label for="inputOutput">Resultado / Output</label>
-                        <textarea id="inputOutput" rows="4" spellcheck="false">Iniciando sistema POS...
-Verificando dispositivo  1
-Verificando dispositivo  2
-Verificando dispositivo  3
-Sistema listo.</textarea>
-                    </div>
-                </div>
-
-                <!-- TAB: SETTINGS -->
-                <div class="tab-panel" id="settings-tab">
-                    <!-- FONT SIZE -->
-                    <div class="input-group slider-group">
-                        <label for="fontSize">Tamaño de Fuente (rem)</label>
-                        <div class="slider-row">
-                            <input type="range" id="fontSize" min="0.6" max="1.5" value="1" step="0.02">
-                            <span class="slider-value" id="valFontSize">1</span>
-                        </div>
-                    </div>
-                    <!-- SPEED SETTINGS -->
-                    <div class="input-group slider-group">
-                        <label for="speedTyping">Velocidad de escritura de código</label>
-                        <div class="slider-row">
-                            <input type="range" id="speedTyping" min="10" max="150" value="20">
-                            <span class="slider-value" id="valTyping">20ms</span>
-                        </div>
-                    </div>
-                    <div class="input-group slider-group">
-                        <label for="speedTerminal">Velocidad de escritura en terminal</label>
-                        <div class="slider-row">
-                            <input type="range" id="speedTerminal" min="10" max="150" value="30">
-                            <span class="slider-value" id="valTerminal">30ms</span>
-                        </div>
-                    </div>
-                    <div class="input-group slider-group">
-                        <label for="speedOutput">Velocidad de aparición del output</label>
-                        <div class="slider-row">
-                            <input type="range" id="speedOutput" min="50" max="800" value="100">
-                            <span class="slider-value" id="valOutput">100ms</span>
-                        </div>
-                    </div>
-                    <div class="input-group slider-group">
-                        <label for="pausePhase">Pausa entre fases</label>
-                        <div class="slider-row">
-                            <input type="range" id="pausePhase" min="200" max="3000" value="1000" step="100">
-                            <span class="slider-value" id="valPause">1.0s</span>
-                        </div>
-                    </div>
-                    <div class="input-group slider-group">
-                        <label for="pauseCompile">Pausa de compilación (simulada)</label>
-                        <div class="slider-row">
-                            <input type="range" id="pauseCompile" min="300" max="4000" value="1500" step="100">
-                            <span class="slider-value" id="valCompile">1.5s</span>
-                        </div>
-                    </div>
-                    <div class="input-group slider-group">
-                        <label for="pauseDir">Pausa en comando DIR</label>
-                        <div class="slider-row">
-                            <input type="range" id="pauseDir" min="500" max="5000" value="2000" step="100">
-                            <span class="slider-value" id="valDir">2.0s</span>
-                        </div>
-                    </div>
-                    <div class="input-group slider-group">
-                        <label for="pauseEnd">Pausa final antes de terminar</label>
-                        <div class="slider-row">
-                            <input type="range" id="pauseEnd" min="500" max="5000" value="2000" step="100">
-                            <span class="slider-value" id="valEnd">2.0s</span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="videoFormat">Formato de video</label>
-                        <select id="videoFormat" style="width:100%;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text-primary);font-family:var(--font-mono);font-size:0.82rem;outline:none;">
-                            <option value="webm">WebM (VP9 — recomendado)</option>
-                            <option value="mp4">MP4 (H.264 — si el navegador lo soporta)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- TAB: ENVIRONMENT -->
-                <div class="tab-panel" id="env-tab">
-                    <div class="input-group">
-                        <label for="envBootSeq">Secuencia Boot (4690 OS)</label>
-                        <textarea id="envBootSeq" rows="6" spellcheck="false">C>ECHO OFF
-This message was displayed by AUTOEXEC.BAT in ADX_UPGM:
-IP addresses.
-
-addr          127.0.0.1 interface 0 mask ff000000 broadcast            0.0.0.0
-addr      192.168.1.150 interface 0 mask ffffff00 broadcast      192.168.1.255
-
-C:>cd CURSO
-</textarea>
-                        <small style="color:var(--text-muted);font-size:0.7rem;">Aparece antes de ejecutar el .286</small>
+                        <label for="inputPSPrompt">Prompt del terminal</label>
+                        <input type="text" id="inputPSPrompt" value="PS C:\>" placeholder="ej. PS C:\>">
                     </div>
 
+                    <div class="section-label">Pasos (comandos y salidas)</div>
+                    <div id="psStepsContainer" class="steps-container"></div>
+                    <button type="button" class="btn btn-add-step" id="btnAddPsStep">+ Agregar paso</button>
+
+                    <div class="section-label" style="margin-top:16px;">Plantilla DIR</div>
                     <div class="input-group">
-                        <label for="envPsDir">Plantilla PowerShell DIR (Post-Compilación)</label>
-                        <textarea id="envPsDir" rows="7" spellcheck="false" style="font-size:0.7rem;">    Directorio: C:\CURSO
+                        <label for="inputPSDirTemplate">Listado de directorio PowerShell (usa {{FILE_BAS}}, {{FILE_OBJ}}, {{FILE_286}}, {{FILE_SYM}})</label>
+                        <textarea id="inputPSDirTemplate" rows="8" spellcheck="false" style="font-size:0.7rem;">    Directorio: C:\CURSO
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
@@ -243,76 +173,163 @@ Mode                 LastWriteTime         Length Name
 -a----     09/07/2025  01:08 p. m.         134388 link86.exe
 -a----     09/07/2025  01:08 p. m.         141952 sb286l.l86
 -a----     09/07/2025  01:08 p. m.          14720 sb286tvl.l86</textarea>
-                        <small style="color:var(--text-muted);font-size:0.7rem;">Usa etiquetas: {{FILE_BAS}}, {{FILE_OBJ}}, {{FILE_286}}, {{FILE_SYM}}</small>
+                    </div>
+                    <small style="color:var(--text-muted);font-size:0.7rem;display:block;margin-top:-8px;">
+                        Etiquetas: {{FILE_BAS}}, {{FILE_OBJ}}, {{FILE_286}}, {{FILE_SYM}}.<br>
+                        Usa <code>{{PS_DIR_OBJ}}</code> como output de paso para mostrar solo .BAS+.OBJ<br>
+                        Usa <code>{{PS_DIR_EXE}}</code> como output de paso para mostrar .BAS+.OBJ+.286+.SYM
+                    </small>
+
+                    <div class="section-label" style="margin-top:16px;">Plantillas DIR adicionales (JSON)</div>
+                    <div class="input-group">
+                        <label for="inputPSDirTemplates">Objeto JSON con plantillas nombradas (ej. PS_DIR_COMPILE, PS_DIR_LINK)</label>
+                        <textarea id="inputPSDirTemplates" rows="6" spellcheck="false" style="font-size:0.7rem;" placeholder='{"PS_DIR_COMPILE":"dir listing...","PS_DIR_LINK":"dir listing..."}'>{}</textarea>
+                        <small style="color:var(--text-muted);font-size:0.68rem;">Usa <code>{{NOMBRE_PLANTILLA}}</code> en el output de un paso para referenciarla.</small>
+                    </div>
+                </div>
+
+                <!-- TAB: 4690 OS -->
+                <div class="tab-panel" id="ibm-tab">
+                    <div class="input-group">
+                        <label for="input4690Prompt">Prompt del controlador 4690</label>
+                        <input type="text" id="input4690Prompt" value="C:CURSO/>" placeholder="ej. C:CURSO/>">
+                    </div>
+                    <div class="input-group">
+                        <label for="input4690BootSeq">Secuencia de arranque (boot)</label>
+                        <textarea id="input4690BootSeq" rows="6" spellcheck="false">C>ECHO OFF
+This message was displayed by AUTOEXEC.BAT in ADX_UPGM:
+IP addresses.
+
+addr          127.0.0.1 interface 0 mask ff000000 broadcast            0.0.0.0
+addr      192.168.1.150 interface 0 mask ffffff00 broadcast      192.168.1.255
+
+C:>cd CURSO</textarea>
+                        <small style="color:var(--text-muted);font-size:0.7rem;">Aparece antes del primer comando</small>
                     </div>
 
+                    <div class="section-label">Pasos (comandos y salidas)</div>
+                    <div id="ibmStepsContainer" class="steps-container"></div>
+                    <button type="button" class="btn btn-add-step" id="btnAddIbmStep">+ Agregar paso</button>
+
+                    <div class="section-label" style="margin-top:16px;">Plantilla DIR 4690</div>
                     <div class="input-group">
-                        <label for="envDosDir">Plantilla 4690 OS DIR (Post-Ejecución)</label>
-                        <textarea id="envDosDir" rows="7" spellcheck="false" style="font-size:0.7rem;">  Volume in drive h0: is DISK_C
+                        <label for="input4690DirTemplate">Listado de directorio 4690 OS (usa {{DATE_4690}}, {{TIME_4690}}, {{FILE_286_DOS}})</label>
+                        <textarea id="input4690DirTemplate" rows="6" spellcheck="false" style="font-size:0.7rem;">  Volume in drive h0: is DISK_C
   Directory of h0:CURSO/
 
-.            <DIR>      {{DATE_4690}}  10:33a
-..           <DIR>      {{DATE_4690}}  10:33a
+.            &lt;DIR&gt;      {{DATE_4690}}  10:33a
+..           &lt;DIR&gt;      {{DATE_4690}}  10:33a
 {{FILE_286_DOS}}
 
            5 Files   29493056 KB free</textarea>
-                        <small style="color:var(--text-muted);font-size:0.7rem;">Usa etiquetas: {{FILE_286_DOS}}, {{DATE_4690}}, {{TIME_4690}}</small>
+                    </div>
+                    <small style="color:var(--text-muted);font-size:0.7rem;display:block;margin-top:-8px;">
+                        Etiquetas: {{DATE_4690}}, {{TIME_4690}}, {{FILE_286_DOS}}.<br>
+                        Usa <code>{{DOS_DIR_RUN}}</code> como output de paso para usar esta plantilla.
+                    </small>
+
+                    <div class="section-label" style="margin-top:16px;">Plantillas DIR adicionales (JSON)</div>
+                    <div class="input-group">
+                        <label for="input4690DirTemplates">Objeto JSON con plantillas nombradas</label>
+                        <textarea id="input4690DirTemplates" rows="4" spellcheck="false" style="font-size:0.7rem;" placeholder='{"DOS_DIR_APP":"dir listing..."}'>{}</textarea>
+                        <small style="color:var(--text-muted);font-size:0.68rem;">Usa <code>{{NOMBRE_PLANTILLA}}</code> en el output de un paso para referenciarla.</small>
                     </div>
                 </div>
 
-                <!-- TAB: SYSTEM -->
+                <!-- TAB: SISTEMA -->
                 <div class="tab-panel" id="sys-tab">
-                    <p style="font-size:0.8rem; color:var(--text-main); margin-bottom: 15px;">
-                        Tus configuraciones, comandos y plantillas se guardan automáticamente en tu navegador. Puedes exportarlas para compartirlas o hacer un respaldo.
+                    <p style="font-size:0.8rem; color:var(--text-primary); margin-bottom: 8px;">
+                        La configuraci&oacute;n se guarda autom&aacute;ticamente en tu navegador.
                     </p>
-                    <button class="btn btn-primary" id="btnExportConfig" style="margin-bottom: 10px;">
-                        <span class="btn-icon">💾</span> Exportar Configuración JSON
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 15px;">
+                        Exporta tu configuraci&oacute;n para compartirla o respaldarla. Importa archivos <code>.json</code> para cargar otras configuraciones.
+                    </p>
+
+                    <button class="btn btn-primary" id="btnExportConfig" style="margin-bottom:10px;">
+                        <span class="btn-icon">&#x1f4be;</span> Exportar Configuraci&oacute;n JSON
                     </button>
-                    
-                    <label class="btn btn-record" style="display:flex; cursor:pointer;" id="btnImportConfigWrapper">
-                        <span class="btn-icon">📁</span> Importar Configuración JSON
+
+                    <label class="btn btn-record" style="display:flex; cursor:pointer; margin-bottom:10px;" id="btnImportConfigWrapper">
+                        <span class="btn-icon">&#x1f4c1;</span> Importar Configuraci&oacute;n JSON
                         <input type="file" id="fileImportConfig" accept=".json" style="display:none;">
                     </label>
+
+                    <button class="btn btn-clean" id="btnResetConfig" style="margin-bottom:10px;">
+                        <span class="btn-icon">&#x21ba;</span> Restaurar Valores por Defecto
+                    </button>
+
+                    <hr style="border-color:var(--border-subtle); margin: 14px 0;">
+
+                    <div style="font-size:0.75rem; color:var(--text-muted);">
+                        <p><strong>Par&aacute;metros del JSON de configuraci&oacute;n:</strong></p>
+                        <ul style="padding-left:16px;line-height:1.7;">
+                            <li><code>simulation.type</code> — "all", "editor", "powershell", "ibm4690"</li>
+                            <li><code>simulation.fontSize</code> — Tama&ntilde;o de fuente (0.6-1.5 rem)</li>
+                            <li><code>simulation.videoFormat</code> — "mp4" o "webm"</li>
+                            <li><code>simulation.videoPrefix</code> — Prefijo para archivos (ej. "1.1-tipos")</li>
+                            <li><code>simulation.speedTyping</code> — ms/car&aacute;cter en editor (10-150)</li>
+                            <li><code>simulation.speedTerminal</code> — ms/car&aacute;cter en terminal (10-150)</li>
+                            <li><code>simulation.speedOutput</code> — ms/l&iacute;nea de salida (50-800)</li>
+                            <li><code>simulation.pauseBetweenPhases</code> — ms entre paneles (200-3000)</li>
+                            <li><code>editor.fileName</code> — Nombre del archivo .BAS</li>
+                            <li><code>editor.code</code> — C&oacute;digo fuente BASIC</li>
+                            <li><code>powershell.prompt</code> — Texto del prompt</li>
+                            <li><code>powershell.dirTemplate</code> — Plantilla del comando DIR</li>
+                            <li><code>powershell.steps[]</code> — Array de pasos configurables</li>
+                            <li><code>powershell.steps[].enabled</code> — true/false para habilitar paso</li>
+                            <li><code>powershell.steps[].command</code> — Comando a mostrar</li>
+                            <li><code>powershell.steps[].output</code> — Salida del comando (usa {{PS_DIR_OBJ}} o {{PS_DIR_EXE}})</li>
+                            <li><code>powershell.steps[].simulatedDelay</code> — ms de espera simulada</li>
+                            <li><code>powershell.steps[].outputDelay</code> — ms entre l&iacute;neas de salida</li>
+                            <li><code>ibm4690.prompt</code> — Prompt del controlador</li>
+                            <li><code>ibm4690.bootSequence</code> — Texto de arranque del sistema</li>
+                            <li><code>ibm4690.dirTemplate</code> — Plantilla DIR del 4690 OS</li>
+                            <li><code>ibm4690.steps[]</code> — Array de pasos configurables</li>
+                            <li><code>ibm4690.steps[].enabled</code> — true/false</li>
+                            <li><code>ibm4690.steps[].command</code> — Comando a ejecutar</li>
+                            <li><code>ibm4690.steps[].output</code> — Salida del comando (usa {{DOS_DIR_RUN}})</li>
+                            <li><code>ibm4690.steps[].simulatedDelay</code> — ms de espera simulada</li>
+                            <li><code>ibm4690.steps[].outputDelay</code> — ms entre l&iacute;neas de salida</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+
             <!-- ACTION BUTTONS -->
             <div class="sidebar-footer">
                 <button class="btn btn-primary" id="btnPlay">
-                    <span class="btn-icon">▶</span> Previsualizar
+                    <span class="btn-icon">&#9654;</span> Previsualizar
                 </button>
 
                 <button class="btn btn-clean" id="btnClean">
-                    <span class="btn-icon">✧</span> Limpiar Pantalla
+                    <span class="btn-icon">&#10007;</span> Limpiar Pantalla
                 </button>
-                
+
                 <div class="record-group">
-                    <p style="font-size:0.7rem; color: var(--text-muted); margin-bottom:6px; text-align:center; text-transform:uppercase;">Exportar Video</p>
-                    <button class="btn btn-record" id="btnRecordEditor">
-                        <span class="btn-icon rec-dot">●</span> Grabar solo Editor
+                    <p class="record-group-label">Exportar Video</p>
+                    <button class="btn btn-record editor-rec" id="btnRecordEditor">
+                        <span class="btn-icon rec-dot">&#9679;</span> Grabar Editor
                     </button>
-                    <button class="btn btn-record" id="btnRecordCompile" style="margin-top: 6px;">
-                        <span class="btn-icon rec-dot">●</span> Grabar solo Compilador
+                    <button class="btn btn-record ps-rec" id="btnRecordPS">
+                        <span class="btn-icon rec-dot">&#9679;</span> Grabar PowerShell
                     </button>
-                    <button class="btn btn-record" id="btnRecordRun" style="margin-top: 6px;">
-                        <span class="btn-icon rec-dot">●</span> Grabar solo Ejecución
-                    </button>
-                    <button class="btn btn-record" id="btnRecordAll" style="margin-top: 6px;">
-                        <span class="btn-icon rec-dot">●</span> Grabar Todo (3 paneles)
+                    <button class="btn btn-record ibm-rec" id="btnRecordIBM">
+                        <span class="btn-icon rec-dot">&#9679;</span> Grabar 4690 OS
                     </button>
                 </div>
 
                 <button class="btn btn-stop hidden" id="btnStop">
-                    <span class="btn-icon">■</span> Detener
+                    <span class="btn-icon">&#9632;</span> Detener
                 </button>
             </div>
         </aside>
 
-        <!-- ========== MAIN CANVAS ========== -->
+        <!-- ========== MAIN CANVAS: 3 EQUAL HORIZONTAL PANELS ========== -->
         <main class="canvas-area" id="canvasArea">
             <div class="canvas-wrapper" id="canvasWrapper">
 
                 <!-- LEFT: EDITOR WINDOW -->
-                <div class="panel-left">
+                <div class="panel-third">
                     <div class="window editor-window" id="editorWindow">
                         <div class="window-titlebar">
                             <div class="window-dots">
@@ -320,7 +337,7 @@ Mode                 LastWriteTime         Length Name
                                 <span class="dot-yellow"></span>
                                 <span class="dot-green"></span>
                             </div>
-                            <span class="window-title" id="editorTitle">Example3.bas — 4690 BASIC Editor</span>
+                            <span class="window-title" id="editorTitle">Example.bas — 4690 BASIC Editor</span>
                             <div class="window-dots invisible">
                                 <span></span><span></span><span></span>
                             </div>
@@ -332,51 +349,57 @@ Mode                 LastWriteTime         Length Name
                     </div>
                 </div>
 
-                <!-- RIGHT: TWO TERMINALS -->
-                <div class="panel-right">
-
-                    <!-- TOP-RIGHT: COMPILATION TERMINAL -->
-                    <div class="window terminal-window" id="compileWindow">
+                <!-- CENTER: POWERSHELL TERMINAL -->
+                <div class="panel-third">
+                    <div class="window terminal-window" id="psWindow">
                         <div class="window-titlebar terminal-titlebar">
                             <div class="window-dots">
                                 <span class="dot-red"></span>
                                 <span class="dot-yellow"></span>
                                 <span class="dot-green"></span>
                             </div>
-                            <span class="window-title">Compilación — PowerShell</span>
+                            <span class="window-title">Compilaci&oacute;n — PowerShell</span>
                             <div class="window-dots invisible">
                                 <span></span><span></span><span></span>
                             </div>
                         </div>
-                        <div class="window-body terminal-body" id="compileBody">
-                            <pre class="terminal-output" id="compileOutput"></pre>
+                        <div class="window-body terminal-body" id="psBody">
+                            <pre class="terminal-output" id="psOutput"></pre>
                         </div>
                     </div>
+                </div>
 
-                    <!-- BOTTOM-RIGHT: EXECUTION TERMINAL -->
-                    <div class="window terminal-window" id="runWindow">
+                <!-- RIGHT: 4690 OS CONTROLLER TERMINAL -->
+                <div class="panel-third">
+                    <div class="window terminal-window" id="ibmWindow">
                         <div class="window-titlebar terminal-titlebar run-titlebar">
                             <div class="window-dots">
                                 <span class="dot-red"></span>
                                 <span class="dot-yellow"></span>
                                 <span class="dot-green"></span>
                             </div>
-                            <span class="window-title">Ejecución — 4690 OS Controller</span>
+                            <span class="window-title">Ejecuci&oacute;n — 4690 OS Controller</span>
                             <div class="window-dots invisible">
                                 <span></span><span></span><span></span>
                             </div>
                         </div>
-                        <div class="window-body terminal-body run-body" id="runBody">
-                            <pre class="terminal-output run-output" id="runOutput"></pre>
+                        <div class="window-body terminal-body run-body" id="ibmBody">
+                            <pre class="terminal-output run-output" id="ibmOutput"></pre>
                         </div>
                     </div>
-
                 </div>
-            </div>
 
+            </div>
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/mp4-muxer@4.3.3/build/mp4-muxer.js"></script>
+    <script src="utils.js"></script>
+    <script src="config.js"></script>
+    <script src="editor.js"></script>
+    <script src="powershell.js"></script>
+    <script src="ibm4690.js"></script>
+    <script src="recorder.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

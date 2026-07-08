@@ -1,0 +1,110 @@
+{
+  "_schema": "4690 BASIC Video Generator v2.0 — Archivo de configuración",
+  "_descripcion": "Este archivo define todos los parámetros de la simulación. Modifícalo y luego impórtalo desde la pestaña 'Sistema'.",
+  "_parametros": {
+    "simulation.type": "\"all\" | \"editor\" | \"powershell\" | \"ibm4690\". Tipo de simulación a ejecutar.",
+    "simulation.fontSize": "Tamaño de fuente en rem (0.6 - 1.5). Afecta a los 3 paneles.",
+    "simulation.videoFormat": "\"mp4\" | \"webm\". Formato del video exportado.",
+    "simulation.videoPrefix": "Prefijo para los archivos de video (ej. \"1.1-tipos\"). Resulta en: 1.1-tipos-editor.mp4, 1.1-tipos-powershell.mp4, etc.",
+    "simulation.speedTyping": "Milisegundos por carácter al escribir código (10-150).",
+    "simulation.speedTerminal": "Milisegundos por carácter al escribir comandos en terminal (10-150).",
+    "simulation.speedOutput": "Milisegundos por línea de salida en pantalla (50-800).",
+    "simulation.pauseBetweenPhases": "Milisegundos de pausa entre cada panel (200-3000).",
+    "editor.fileName": "Nombre del archivo .BAS que aparece en la barra de título del editor.",
+    "editor.code": "Código fuente BASIC a mostrar en el panel del editor.",
+    "powershell.prompt": "Texto del prompt de PowerShell (ej. 'PS C:\\\\>').",
+    "powershell.dirTemplate": "Plantilla del listado DIR de PowerShell. Usa placeholders {{FILE_BAS}}, {{FILE_OBJ}}, {{FILE_286}}, {{FILE_SYM}}.",
+    "powershell.dirTemplates": "Objeto JSON con plantillas nombradas. Referenciables desde los pasos con {{NOMBRE}}.",
+    "powershell.steps": "Array de pasos configurables para la terminal PowerShell.",
+    "powershell.steps[].enabled": "true/false — si false, el paso se omite.",
+    "powershell.steps[].command": "Comando que se escribe en la terminal (ej. '.\\\\BASIC.EXE .\\\\Example.bas').",
+    "powershell.steps[].output": "Salida del comando. Usa '{{PS_DIR_OBJ}}' para DIR con .BAS+.OBJ, o '{{PS_DIR_EXE}}' para DIR con todos los archivos.",
+    "powershell.steps[].simulatedDelay": "Milisegundos de espera simulada (compilación, linkeo, etc).",
+    "powershell.steps[].outputDelay": "Milisegundos entre cada línea de salida del comando.",
+    "ibm4690.prompt": "Prompt del controlador 4690 OS (ej. 'C:CURSO/>').",
+    "ibm4690.bootSequence": "Texto de arranque que aparece al inicio del panel 4690 OS (gris).",
+    "ibm4690.dirTemplate": "Plantilla del listado DIR del 4690 OS. Usa {{DATE_4690}}, {{TIME_4690}}, {{FILE_286_DOS}}.",
+    "ibm4690.dirTemplates": "Objeto JSON con plantillas nombradas. Referenciables desde los pasos con {{NOMBRE}}.",
+    "ibm4690.steps": "Array de pasos configurables para la terminal 4690 OS Controller.",
+    "ibm4690.steps[].enabled": "true/false — si false, el paso se omite.",
+    "ibm4690.steps[].command": "Comando que se escribe en la terminal 4690 (ej. 'dir', 'EXAMPLE1').",
+    "ibm4690.steps[].output": "Salida del comando. Usa '{{DOS_DIR_RUN}}' para usar la plantilla DIR del 4690.",
+    "ibm4690.steps[].simulatedDelay": "Milisegundos de espera simulada después del comando.",
+    "ibm4690.steps[].outputDelay": "Milisegundos entre cada línea de salida del comando."
+  },
+  "meta": {
+    "version": "2.0",
+    "description": "4690 BASIC Video Generator — Configuración de Simulación"
+  },
+  "simulation": {
+    "type": "all",
+    "fontSize": "1.0",
+    "videoFormat": "mp4",
+    "videoPrefix": "1.1-tipos-de-datos",
+    "speedTyping": 20,
+    "speedTerminal": 30,
+    "speedOutput": 100,
+    "pauseBetweenPhases": 1000
+  },
+  "editor": {
+    "fileName": "Example.bas",
+    "code": "! Tipos de datos fundamentales\n%ENVIRON C\n\n! String (Sufijo $)\nItemDescription$ = \"Cereal 500g\"\n\n! Entero (Sufijo %)\nQuantity% = 3\n\n! Real (Sin sufijo)\nUnitPrice = 45.50\n\n! Calculo de tipo real\nSubTotal = Quantity% * UnitPrice\n\nPRINT \"Producto: \"; ItemDescription$\nPRINT \"Cantidad: \"; Quantity%\nPRINT \"Precio U: $\"; UnitPrice\nPRINT \"Total:    $\"; SubTotal\nEND"
+  },
+  "powershell": {
+    "prompt": "PS C:\\>",
+    "dirTemplate": "    Directorio: C:\\CURSO\n\nMode                 LastWriteTime         Length Name\n----                 -------------         ------ ----\n-a----     25/06/2025  11:10 a. m.         276080 BASIC.EXE\n{{FILE_BAS}}\n{{FILE_OBJ}}\n{{FILE_SYM}}\n{{FILE_286}}\n-a----     09/07/2025  01:08 p. m.         134388 link86.exe\n-a----     09/07/2025  01:08 p. m.         141952 sb286l.l86\n-a----     09/07/2025  01:08 p. m.          14720 sb286tvl.l86",
+    "dirTemplates": {},
+    "steps": [
+      {
+        "enabled": true,
+        "command": ".\\BASIC.EXE .\\Example.bas",
+        "output": "BASIC .\\Example.bas\n--------------------------------------------------\nIBM 4680 BASIC Compiler  07/09/10  Version 3.15\n5696-192 (c) Copyright IBM Corp 1986-2004.\nLicensed Material - Program Property Of IBM.\n  (c) Copyright Digital Research Inc. 1985\n--------------------------------------------------\nend of pass 1\nend of pass 2\nEnd of Compilation\n\n        Large Memory Model Controller Code Generation\n    --------------------------------------------------\n        Code segment size:      00a8H (168 bytes)\n        Data segment size:      0072H (114 bytes)\n    --------------------------------------------------",
+        "simulatedDelay": 1500,
+        "outputDelay": 55
+      },
+      {
+        "enabled": true,
+        "command": "dir",
+        "output": "{{PS_DIR_OBJ}}",
+        "simulatedDelay": 2000,
+        "outputDelay": 30
+      },
+      {
+        "enabled": true,
+        "command": ".\\link86.exe .\\EXAMPLE.OBJ",
+        "output": "--------------------------------------------------\nLINK86 Linkage Editor      vers. 3.10c\nF l e x O S  -  2 8 6   L i n k e r\nCopyright (C) 1982-1991     Digital Research, Inc.\n--------------------------------------------------\n\n....................................................\n\nCODE    00a06h =    2566\nDATA    00b04h =    2820\nSTACK   00a00h =    2560\n         Total =    7946",
+        "simulatedDelay": 1000,
+        "outputDelay": 45
+      },
+      {
+        "enabled": true,
+        "command": "dir",
+        "output": "{{PS_DIR_EXE}}",
+        "simulatedDelay": 2000,
+        "outputDelay": 30
+      }
+    ]
+  },
+  "ibm4690": {
+    "prompt": "C:CURSO/>",
+    "bootSequence": "C>ECHO OFF\nThis message was displayed by AUTOEXEC.BAT in ADX_UPGM:\nIP addresses.\n\naddr          127.0.0.1 interface 0 mask ff000000 broadcast            0.0.0.0\naddr      192.168.1.150 interface 0 mask ffffff00 broadcast      192.168.1.255\n\nC:>cd CURSO",
+    "dirTemplate": "  Volume in drive h0: is DISK_C\n  Directory of h0:CURSO/\n\n.            <DIR>      {{DATE_4690}}  10:33a\n..           <DIR>      {{DATE_4690}}  10:33a\n{{FILE_286_DOS}}\n\n           5 Files   29493056 KB free",
+    "dirTemplates": {},
+    "steps": [
+      {
+        "enabled": true,
+        "command": "dir",
+        "output": "{{DOS_DIR_RUN}}",
+        "simulatedDelay": 2000,
+        "outputDelay": 30
+      },
+      {
+        "enabled": true,
+        "command": "EXAMPLE1",
+        "output": "Iniciando sistema POS...\nVerificando dispositivo  1\nVerificando dispositivo  2\nVerificando dispositivo  3\nSistema listo.",
+        "simulatedDelay": 400,
+        "outputDelay": 100
+      }
+    ]
+  }
+}
