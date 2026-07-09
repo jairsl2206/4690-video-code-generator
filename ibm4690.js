@@ -6,7 +6,7 @@
     'use strict';
 
     const { $, delay, escapeHtml, scrollToBottom, CURSOR_TERM,
-            typeTextInto, printLineInto, printMultilineInto, showPrompt } = window.Utils;
+            typeTextInto, printLineInto, printMultilineInto, showPrompt, removeCursor } = window.Utils;
 
     const DOM_4690 = {
         window: null,
@@ -92,8 +92,12 @@
             }
         }
 
-        out.innerHTML = out.innerHTML.replace(new RegExp(escapeHtml(prompt) + ' ' + '$', 'm'),
-            '<span style="color:#50fa7b">' + escapeHtml(prompt) + ' </span>') + CURSOR_TERM;
+        removeCursor(out);
+        out.innerHTML = out.innerHTML.replace(
+            new RegExp('(<span[^>]*>)(' + escapeHtml(prompt) + ' )</span>$'),
+            '<span style="color:#50fa7b">$2</span>'
+        );
+        out.innerHTML += CURSOR_TERM;
         scrollToBottom(body);
     }
 
